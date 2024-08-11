@@ -1,10 +1,20 @@
 from bluepy.btle import UUID, Peripheral, DefaultDelegate, BTLEException
 import struct
+import time
 
 
-# Battery
 rmap = {
-    33045: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.01,"unit":"V","name":"battery_voltage_bms2"},
+    # Advanced Information
+    33071: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"dc_bus_voltage"},
+    33072: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"busbar_half_voltage"},
+    33079: {"value":None,"num":2,"negative":1,"datamode":0,"datatype":1,"gain":1,"unit":"W","name":"active_power"},
+    33081: {"value":None,"num":2,"negative":1,"datamode":0,"datatype":1,"gain":1,"unit":"Var","name":"reactive_power"},
+    33083: {"value":None,"num":2,"negative":1,"datamode":0,"datatype":1,"gain":1,"unit":"VA","name":"apparent_power"},
+    33093: {"value":None,"num":1,"negative":1,"datamode":0,"datatype":1,"gain":0.1,"unit":"℃","name":"inverter_temperature"},
+    33105: {"value":None,"num":1,"negative":1,"datamode":0,"datatype":1,"gain":0.001,"unit":"","name":"pf_actual_ajustment_value"},
+    33136: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"llc_bus_voltage"},
+
+    # Battery
     33111: {"value":None,"num":1,"negative":1,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"bms_status"},
     33133: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"battery_voltage"},
     33134: {"value":None,"num":1,"negative":1,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"battery_current"},
@@ -26,47 +36,6 @@ rmap = {
     33184: {"value":None,"num":2,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"kWh","name":"Total_Grid_Charging_Energy"},
     33208: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"underVoltage_protection_value"},
     33211: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"overVoltage_protection_value"},
-    34200: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"%","name":"LG_Primary_battery_SOC"},
-    34201: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"%","name":"LG_Primary_battery_SOH"},
-    34202: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"LG_Primary_battery_Voltage_BMS"},
-    34203: {"value":None,"num":1,"negative":1,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"LG_Primary_battery_Current_BMS"},
-    34204: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"W","name":"LG_Primary_battery_max_Ch_power"},
-    34205: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"W","name":"LG_Primary_battery_max_Dis_power"},
-    34206: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Primary_battery_DCDC_Main"},
-    34207: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Primary_battery_DCDC_Test"},
-    34208: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Primary_battery_BMS_high"},
-    34209: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Primary_battery_BMS_low"},
-    34210: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Primary_battery_Fault_ID"},
-    34211: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Primary_battery_Results"},
-    34212: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Primary_battery_Status"},
-    34213: {"value":None,"num":1,"negative":1,"datamode":0,"datatype":1,"gain":1,"unit":"W","name":"LG_Primary_battery_Power"},
-    34216: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"%","name":"LG_Secondary_battery_SOC"},
-    34217: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"%","name":"LG_Secondary_battery_SOH"},
-    34218: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"LG_Secondary_battery_Voltage_BMS"},
-    34219: {"value":None,"num":1,"negative":1,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"LG_Secondary_battery_Current_BMS"},
-    34220: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"W","name":"LG_Secondary_battery_Max_Char_Power"},
-    34221: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"W","name":"LG_Secondary_battery_Max_Dis_Power"},
-    34222: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Secondary_battery_DCDC_Main"},
-    34223: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Secondary_battery_DCDC_Test"},
-    34224: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Secondary_battery_BMS_high"},
-    34225: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Secondary_battery_BMS_low"},
-    34226: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Secondary_battery_Fault_ID"},
-    34227: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Secondary_battery_Results"},
-    34228: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"LG_Secondary_battery_Status"},
-    34229: {"value":None,"num":1,"negative":1,"datamode":0,"datatype":1,"gain":1,"unit":"W","name":"LG_Secondary_battery_Power"},
-    34275: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.01,"unit":"V","name":"Battery2_Voltage_BMS"},
-    34276: {"value":None,"num":1,"negative":1,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"Battery2_Current_BMS"},
-    34278: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"%","name":"Battery2_SOC2"},
-    34279: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"%","name":"Battery2_SOH2"},
-    34281: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"Battery2_BMS2_Current_Limit"},
-    34282: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"Battery2_BMS2_Discharge_Limit"},
-    34288: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"Battery2Voltage_BMS"},
-    34289: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"Battery2Voltage"},
-    34290: {"value":None,"num":1,"negative":1,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"Battery2Current"},
-    34291: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"battery2urrentDirection"},
-    34339: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"Battery2UnderVoltageValue"},
-    34341: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"Battery2EqualizationVoltage"},
-    34342: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"Battery2OverVoltageValue"},
     34345: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"BatteryBMS_Value"},
     34346: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"BatteryBMS_VoltageValue"},
     34347: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"BatteryBMS_State"},
@@ -87,8 +56,25 @@ rmap = {
     34363: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"BatteryBMS_NumberParallel"},
     34364: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"BatteryBMS_NumberPacks"},
     34365: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"BatteryBMS_NumberModules"},
-    34368: {"value":None,"num":2,"negative":1,"datamode":0,"datatype":1,"gain":1,"unit":"W","name":"Battery2ChargingDischargingPower"},
-    34370: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.01,"unit":"V","name":"Battery2_Voltage_BMS2"}
+
+    # Battery Settings
+    43009: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"current_operating_battery_model"},
+    43011: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"%","name":"over_discharge_soc"},
+    43012: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"maximum_charging_current"},
+    43013: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"maximum_discharge_current"},
+    43018: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"%","name":"strong_charge_soc"},
+    43027: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":10,"unit":"W","name":"force_limit_current"},
+    43110: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"energy_storage_control_switch"},
+    43117: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"maximum_battery_charging_current_setting"},
+    43118: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"maximum_battery_discharge_current_setting"},
+    43348: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"awaken_voltage"},
+    43349: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"s","name":"awaken_time"},
+    43374: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":None,"unit":"","name":"output_port_control"},
+    43376: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"s","name":"Awaken_Time_Setting"},
+    43378: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":None,"unit":"","name":"G100_Manual_Fault_Clearing"},
+    43481: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"%","name":"Overdischarge_Hysteresis_SOC"},
+    43482: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"%","name":"battery_Healing_SOC"},
+    43802: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"batteryDual_model"}
 }
 
 
@@ -96,15 +82,25 @@ class NotificationDelegate(DefaultDelegate):
     def __init__(self):
         DefaultDelegate.__init__(self)
         self.response = b''
+        self.done = False
 
     def handleNotification(self, cHandle, data):
         self.response += data
 
+        if len(self.response) >= 2:
+            received_crc = self.response[-2:]
+            calculated_crc = calculate_checksum(self.response[:-2].hex())
 
-def calculate_checksum(command):
-    command_bytes = bytearray.fromhex(command)
+            if received_crc.hex().upper() == calculated_crc.upper():
+                self.done = True
+            else:
+                self.done = False
+
+
+def calculate_checksum(data):
+    data_bytes = bytearray.fromhex(data)
     crc = 0xFFFF
-    for byte in command_bytes:
+    for byte in data_bytes:
         crc ^= byte
         for _ in range(8):
             if crc & 1:
@@ -116,98 +112,103 @@ def calculate_checksum(command):
     crc_high = (crc & 0xFF00) >> 8
     crc_low = (crc & 0x00FF)
     crc_hex = f"{crc_low:02X}{crc_high:02X}"
+    return crc_hex
+
+
+def construct_command(register_address: int, amount, func_code):
+    command = f"FE{func_code}{register_address:04X}{amount:04X}"
+    crc_hex = calculate_checksum(command)
     return f"{command}{crc_hex}"
 
 
-def construct_command(register_address: int, amount):
-    command = f"FE04{register_address:04X}{amount:04X}"
-    return calculate_checksum(command)
+def parse_response(response, address, length):
+    byte_count = response[2]
+    data_start = 3
+    data_end = data_start + byte_count
+    data_field = response[data_start:data_end]
+
+    i = 0
+    while i < len(data_field):
+        current_address = address + i // 2
+        if i // 2 < length and current_address in rmap:
+            num = rmap[current_address].get('num', 1)
+            val = 0
+
+            # Combine the bytes to form the full value
+            for j in range(num):
+                if i + 2 * j < len(data_field):
+                    val = (val << 16) | struct.unpack('>H', data_field[i + 2 * j:i + 2 * j + 2])[0]
+
+            # Check if the value is signed
+            if rmap[current_address].get('negative', 0) == 1:
+                max_value = 1 << (16 * num)  # 2^16 for each register
+                if val >= max_value // 2:  # If the highest bit is set, it's a negative number
+                    val -= max_value  # Convert to signed by subtracting 2^(16 * num)
+
+            gain = rmap[current_address].get('gain', 1)
+            rmap[current_address]['value'] = val * gain if gain is not None else val
+            i += 2 * num
+        else:
+            i += 2
 
 
 class BtleSolis:
     def __init__(self, mac_address, service_uuid_ffe0, char_uuid_ffe1, char_uuid_ffe2):
-        self.mac_address = mac_address
-        self.service_uuid_ffe0 = service_uuid_ffe0
-        self.char_uuid_ffe1 = char_uuid_ffe1
-        self.char_uuid_ffe2 = char_uuid_ffe2
-
-        self.peripheral = None
-        self.delegate = None
-        self.char_ffe1_handle = None
-        self.char_ffe2_handle = None
-        self.results = {}
-
-        self.registers = {
-            "33045": {"length": 1},
-            "33111": {"length": 50},
-            "33161": {"length": 48},
-            "33211": {"length": 1},
-            "34200": {"length": 30},
-            "34275": {"length": 17},
-            "34339": {"length": 32}
-        }
-
-        self.connect()
-
-    def connect(self):
-        print("Connecting...")
-        self.peripheral = Peripheral(self.mac_address)
+        self.peripheral = Peripheral(mac_address)
         self.delegate = NotificationDelegate()
         self.peripheral.setDelegate(self.delegate)
 
-        service_ffe0 = self.peripheral.getServiceByUUID(self.service_uuid_ffe0)
-        self.char_ffe1_handle = service_ffe0.getCharacteristics(self.char_uuid_ffe1)[0]
-        self.char_ffe2_handle = service_ffe0.getCharacteristics(self.char_uuid_ffe2)[0]
+        service_ffe0 = self.peripheral.getServiceByUUID(UUID(service_uuid_ffe0))
+        self.char_ffe1_handle = service_ffe0.getCharacteristics(UUID(char_uuid_ffe1))[0]
+        self.char_ffe2_handle = service_ffe0.getCharacteristics(UUID(char_uuid_ffe2))[0]
+
+        self.registers = {
+            "33071": {"length": 35, "func_code": "04"},
+            "33111": {"length": 50, "func_code": "04"},
+            "33161": {"length": 48, "func_code": "04"},
+            "33211": {"length": 1, "func_code": "04"},
+            "34345": {"length": 21, "func_code": "04"},
+            "43009": {"length": 19, "func_code": "03"},
+            "43110": {"length": 9, "func_code": "03"},
+            "43348": {"length": 2, "func_code": "03"},
+            "43374": {"length": 5, "func_code": "03"},
+            "43481": {"length": 2, "func_code": "03"},
+            "43802": {"length": 1, "func_code": "03"},
+        }
 
     def disconnect(self):
         print("Disconnected.")
         self.peripheral.disconnect()
 
-    def send_command_and_get_response(self, command):
+    def send_command_and_get_response(self, command, timeout=5):
         command = bytearray.fromhex(command)
         self.char_ffe1_handle.write(command, withResponse=False)
         self.peripheral.writeCharacteristic(self.char_ffe2_handle.valHandle + 1, b"\x01\x00", withResponse=True)
 
         self.delegate.response = b''
-        while True:
-            if self.peripheral.waitForNotifications(0.5):
-                continue
-            break
+        self.delegate.done = False
+
+        start_time = time.time()
+
+        while not self.delegate.done:
+            if time.time() - start_time > timeout:
+                raise Exception(f"Timeout({timeout}) occurred while waiting on data.")
+            self.peripheral.waitForNotifications(timeout)
+
         return self.delegate.response
-
-    def parse_response(self, response, address, length):
-        byte_count = response[2]
-        data_start = 3
-        data_end = data_start + byte_count
-        data_field = response[data_start:data_end]
-
-        i = 0
-        while i < len(data_field):
-            current_address = address + i // 2
-            if i // 2 < length and current_address in rmap:
-                num = rmap[current_address].get('num', 1)
-                val = 0
-
-                for j in range(num):
-                    if i + 2 * j < len(data_field):
-                        val = (val << 16) | struct.unpack('>H', data_field[i + 2 * j:i + 2 * j + 2])[0]
-
-                rmap[current_address]['value'] = val * rmap[current_address].get('gain', 1)
-                i += 2 * num
-            else:
-                i += 2
 
     def run(self):
         try:
             # Loop through each command
             for reg, info in self.registers.items():
                 length = info["length"]
-                command = construct_command(int(reg), length)
+                func_code = info["func_code"]
+                command = construct_command(int(reg), length, func_code)
 
                 print(f"Sending command for register {reg}...")
                 try:
                     response = self.send_command_and_get_response(command)
-                    self.parse_response(response, int(reg), length)
+                    parse_response(response, int(reg), length)
                 except Exception as e:
                     print(f"Error retrieving data for register {reg}: {e}")
 
@@ -221,18 +222,12 @@ class BtleSolis:
 
 
 if __name__ == "__main__":
-    # MAC address of the Solis S6 inverter
+    # MAC address of the device
     address = "xx:xx:xx:xx:xx:xx"
 
-    service_uuid_ffe0 = UUID("0000ffe0-0000-1000-8000-00805f9b34fb")
-    char_uuid_ffe1 = UUID("0000ffe1-0000-1000-8000-00805f9b34fb")
-    char_uuid_ffe2 = UUID("0000ffe2-0000-1000-8000-00805f9b34fb")
+    # UUIDs of the services and characteristics
+    service_uuid_ffe0 = "0000ffe0-0000-1000-8000-00805f9b34fb"
+    char_uuid_ffe1 = "0000ffe1-0000-1000-8000-00805f9b34fb"
+    char_uuid_ffe2 = "0000ffe2-0000-1000-8000-00805f9b34fb"
 
-    main = BtleSolis(
-        address,
-        service_uuid_ffe0,
-        char_uuid_ffe1,
-        char_uuid_ffe2
-    )
-
-    main.run()
+    BtleSolis(address, service_uuid_ffe0, char_uuid_ffe1, char_uuid_ffe2).run()

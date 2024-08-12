@@ -1,9 +1,31 @@
 from bluepy.btle import UUID, Peripheral, DefaultDelegate, BTLEException
+import paho.mqtt.client as mqtt
 import struct
 import time
+import json
 
+# EDIT HERE ############################################################################
+MAC_ADDRESS = ""  # xx:xx:xx:xx:xx:xx MAC address of the Inverter
 
-rmap = {
+# UUIDs of the services and characteristics
+SERVICE_UUID_FFE0 = "0000ffe0-0000-1000-8000-00805f9b34fb"
+CHAR_UUID_FFE1 = "0000ffe1-0000-1000-8000-00805f9b34fb"
+CHAR_UUID_FFE2 = "0000ffe2-0000-1000-8000-00805f9b34fb"
+
+# MQTT Broker
+MQTT_BROKER_IP = ""
+MQTT_BROKER_PORT = 1883
+MQTT_USERNAME = ""
+MQTT_PASSWORD = ""
+
+INTERVAL = 20  # Run this script every xx seconds.
+
+# Set TEST_MODE to True if you want to test the data output inside your terminal first.
+# In TEST_MODE you will not publish data to MQTT.
+TEST_MODE = False
+# STOP EDITING #########################################################################
+
+REGISTER_MAP = {
     # Advanced Information
     33071: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"dc_bus_voltage"},
     33072: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"V","name":"busbar_half_voltage"},
@@ -77,6 +99,20 @@ rmap = {
     43802: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":1,"unit":"","name":"batteryDual_model"}
 }
 
+REGISTERS = {
+    "33071": {"length": 35, "func_code": "04"},
+    "33111": {"length": 50, "func_code": "04"},
+    "33161": {"length": 48, "func_code": "04"},
+    "33211": {"length": 1, "func_code": "04"},
+    "34345": {"length": 21, "func_code": "04"},
+    "43009": {"length": 19, "func_code": "03"},
+    "43110": {"length": 9, "func_code": "03"},
+    "43348": {"length": 2, "func_code": "03"},
+    "43374": {"length": 5, "func_code": "03"},
+    "43481": {"length": 2, "func_code": "03"},
+    "43802": {"length": 1, "func_code": "03"},
+}
+
 
 class NotificationDelegate(DefaultDelegate):
     def __init__(self):
@@ -130,8 +166,8 @@ def parse_response(response, address, length):
     i = 0
     while i < len(data_field):
         current_address = address + i // 2
-        if i // 2 < length and current_address in rmap:
-            num = rmap[current_address].get('num', 1)
+        if i // 2 < length and current_address in REGISTER_MAP:
+            num = REGISTER_MAP[current_address].get('num', 1)
             val = 0
 
             # Combine the bytes to form the full value
@@ -140,44 +176,47 @@ def parse_response(response, address, length):
                     val = (val << 16) | struct.unpack('>H', data_field[i + 2 * j:i + 2 * j + 2])[0]
 
             # Check if the value is signed
-            if rmap[current_address].get('negative', 0) == 1:
+            if REGISTER_MAP[current_address].get('negative', 0) == 1:
                 max_value = 1 << (16 * num)  # 2^16 for each register
                 if val >= max_value // 2:  # If the highest bit is set, it's a negative number
                     val -= max_value  # Convert to signed by subtracting 2^(16 * num)
 
-            gain = rmap[current_address].get('gain', 1)
-            rmap[current_address]['value'] = val * gain if gain is not None else val
+            gain = REGISTER_MAP[current_address].get('gain', 1)
+            calculated_value = val * gain if gain is not None else val
+
+            if isinstance(calculated_value, float) and calculated_value != int(calculated_value):
+                calculated_value = round(calculated_value, 2)
+
+            REGISTER_MAP[current_address]['value'] = calculated_value
             i += 2 * num
         else:
             i += 2
 
 
+def publish_data_to_mqtt():
+    client = mqtt.Client()
+    if MQTT_USERNAME != "" and MQTT_PASSWORD != "":
+        client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
+    client.connect(MQTT_BROKER_IP, MQTT_BROKER_PORT, 60)
+    client.publish("home/btle-solis/data", json.dumps(REGISTER_MAP), retain=True)
+    client.disconnect()
+
+
 class BtleSolis:
-    def __init__(self, mac_address, service_uuid_ffe0, char_uuid_ffe1, char_uuid_ffe2):
-        self.peripheral = Peripheral(mac_address)
+    def __init__(self):
+        self.peripheral = Peripheral(MAC_ADDRESS)
         self.delegate = NotificationDelegate()
         self.peripheral.setDelegate(self.delegate)
+        if TEST_MODE:
+            print("Connected.")
 
-        service_ffe0 = self.peripheral.getServiceByUUID(UUID(service_uuid_ffe0))
-        self.char_ffe1_handle = service_ffe0.getCharacteristics(UUID(char_uuid_ffe1))[0]
-        self.char_ffe2_handle = service_ffe0.getCharacteristics(UUID(char_uuid_ffe2))[0]
-
-        self.registers = {
-            "33071": {"length": 35, "func_code": "04"},
-            "33111": {"length": 50, "func_code": "04"},
-            "33161": {"length": 48, "func_code": "04"},
-            "33211": {"length": 1, "func_code": "04"},
-            "34345": {"length": 21, "func_code": "04"},
-            "43009": {"length": 19, "func_code": "03"},
-            "43110": {"length": 9, "func_code": "03"},
-            "43348": {"length": 2, "func_code": "03"},
-            "43374": {"length": 5, "func_code": "03"},
-            "43481": {"length": 2, "func_code": "03"},
-            "43802": {"length": 1, "func_code": "03"},
-        }
+        service_ffe0 = self.peripheral.getServiceByUUID(UUID(SERVICE_UUID_FFE0))
+        self.char_ffe1_handle = service_ffe0.getCharacteristics(UUID(CHAR_UUID_FFE1))[0]
+        self.char_ffe2_handle = service_ffe0.getCharacteristics(UUID(CHAR_UUID_FFE2))[0]
 
     def disconnect(self):
-        print("Disconnected.")
+        if TEST_MODE:
+            print("Disconnected.")
         self.peripheral.disconnect()
 
     def send_command_and_get_response(self, command, timeout=5):
@@ -200,34 +239,36 @@ class BtleSolis:
     def run(self):
         try:
             # Loop through each command
-            for reg, info in self.registers.items():
+            for reg, info in REGISTERS.items():
                 length = info["length"]
                 func_code = info["func_code"]
                 command = construct_command(int(reg), length, func_code)
 
-                print(f"Sending command for register {reg}...")
+                if TEST_MODE:
+                    print(f"Sending command for register {reg}...")
+
                 try:
                     response = self.send_command_and_get_response(command)
                     parse_response(response, int(reg), length)
                 except Exception as e:
                     print(f"Error retrieving data for register {reg}: {e}")
 
-            print("Results:", rmap)
+            if TEST_MODE:
+                print("Results:", REGISTER_MAP)
+            else:
+                publish_data_to_mqtt()
 
         except BTLEException as e:
             print(f"BTLE Error: {e}")
         finally:
-            print("Disconnected.")
+            if TEST_MODE:
+                print("Disconnected.")
             self.peripheral.disconnect()
 
 
 if __name__ == "__main__":
-    # MAC address of the device
-    address = "xx:xx:xx:xx:xx:xx"
-
-    # UUIDs of the services and characteristics
-    service_uuid_ffe0 = "0000ffe0-0000-1000-8000-00805f9b34fb"
-    char_uuid_ffe1 = "0000ffe1-0000-1000-8000-00805f9b34fb"
-    char_uuid_ffe2 = "0000ffe2-0000-1000-8000-00805f9b34fb"
-
-    BtleSolis(address, service_uuid_ffe0, char_uuid_ffe1, char_uuid_ffe2).run()
+    while not TEST_MODE:
+        BtleSolis().run()
+        time.sleep(INTERVAL)
+    else:
+        BtleSolis().run()

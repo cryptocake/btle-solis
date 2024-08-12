@@ -1,0 +1,901 @@
+sensor:
+  - name: "DC Bus Voltage"
+    unique_id: "dc_bus_voltage"
+    state_topic: "home/btle-solis/data"
+    device_class: "voltage"
+    unit_of_measurement: "V"
+    state_class: "measurement"
+    value_template: "{{ value_json['33071'].value }}"
+    icon: mdi:flash
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Busbar Half Voltage"
+    unique_id: "busbar_half_voltage"
+    state_topic: "home/btle-solis/data"
+    device_class: "voltage"
+    unit_of_measurement: "V"
+    state_class: "measurement"
+    value_template: "{{ value_json['33072'].value }}"
+    icon: mdi:flash
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Active Power"
+    unique_id: "active_power"
+    state_topic: "home/btle-solis/data"
+    device_class: "power"
+    unit_of_measurement: "W"
+    state_class: "measurement"
+    value_template: "{{ value_json['33079'].value }}"
+    icon: mdi:flash-outline
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Reactive Power"
+    unique_id: "reactive_power"
+    state_topic: "home/btle-solis/data"
+    device_class: "reactive_power"
+    unit_of_measurement: "Var"
+    state_class: "measurement"
+    value_template: "{{ value_json['33081'].value }}"
+    icon: mdi:power-plug
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Apparent Power"
+    unique_id: "apparent_power"
+    state_topic: "home/btle-solis/data"
+    device_class: "apparent_power"
+    unit_of_measurement: "VA"
+    state_class: "measurement"
+    value_template: "{{ value_json['33083'].value }}"
+    icon: mdi:power-plug-outline
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Inverter Temperature"
+    unique_id: "inverter_temperature"
+    state_topic: "home/btle-solis/data"
+    device_class: "temperature"
+    unit_of_measurement: "°C"
+    state_class: "measurement"
+    value_template: "{{ value_json['33093'].value }}"
+    icon: mdi:thermometer
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "PF Actual Adjustment Value"
+    unique_id: "pf_actual_adjustment_value"
+    state_topic: "home/btle-solis/data"
+    device_class: "power_factor"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['33105'].value }}"
+    icon: mdi:adjust
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "LLC Bus Voltage"
+    unique_id: "llc_bus_voltage"
+    state_topic: "home/btle-solis/data"
+    device_class: "voltage"
+    unit_of_measurement: "V"
+    state_class: "measurement"
+    value_template: "{{ value_json['33136'].value }}"
+    icon: mdi:flash
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "BMS Status"
+    unique_id: "bms_status"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['33111'].value }}"
+    icon: mdi:alert-circle-outline
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Voltage"
+    unique_id: "battery_voltage"
+    state_topic: "home/btle-solis/data"
+    device_class: "voltage"
+    unit_of_measurement: "V"
+    state_class: "measurement"
+    value_template: "{{ value_json['33133'].value }}"
+    icon: mdi:battery
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Current"
+    unique_id: "battery_current"
+    state_topic: "home/btle-solis/data"
+    device_class: "current"
+    unit_of_measurement: "A"
+    state_class: "measurement"
+    value_template: "{{ value_json['33134'].value }}"
+    icon: mdi:current-dc
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Current Direction"
+    unique_id: "battery_current_direction"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['33135'].value }}"
+    icon: mdi:arrow-left-right-bold-outline
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Level"
+    unique_id: "battery_level"
+    state_topic: "home/btle-solis/data"
+    device_class: "battery"
+    unit_of_measurement: "%"
+    state_class: "measurement"
+    value_template: "{{ value_json['33139'].value }}"
+    icon: mdi:battery-charging-100
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "SOH Value"
+    unique_id: "soh_value"
+    state_topic: "home/btle-solis/data"
+    device_class: "battery"
+    unit_of_measurement: "%"
+    state_class: "measurement"
+    value_template: "{{ value_json['33140'].value }}"
+    icon: mdi:battery-heart
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Voltage BMS"
+    unique_id: "battery_voltage_bms"
+    state_topic: "home/btle-solis/data"
+    device_class: "voltage"
+    unit_of_measurement: "V"
+    state_class: "measurement"
+    value_template: "{{ value_json['33141'].value }}"
+    icon: mdi:battery
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Current BMS"
+    unique_id: "battery_current_bms"
+    state_topic: "home/btle-solis/data"
+    device_class: "current"
+    unit_of_measurement: "A"
+    state_class: "measurement"
+    value_template: "{{ value_json['33142'].value }}"
+    icon: mdi:current-dc
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Charging Current Limit"
+    unique_id: "battery_charging_current_limit"
+    state_topic: "home/btle-solis/data"
+    device_class: "current"
+    unit_of_measurement: "A"
+    state_class: "measurement"
+    value_template: "{{ value_json['33143'].value }}"
+    icon: mdi:battery-charging-50
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Discharging Current Limit"
+    unique_id: "battery_discharging_current_limit"
+    state_topic: "home/btle-solis/data"
+    device_class: "current"
+    unit_of_measurement: "A"
+    state_class: "measurement"
+    value_template: "{{ value_json['33144'].value }}"
+    icon: mdi:battery-alert
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Active Power"
+    unique_id: "batteryp_active_power"
+    state_topic: "home/btle-solis/data"
+    device_class: "power"
+    unit_of_measurement: "W"
+    state_class: "measurement"
+    value_template: "{{ value_json['33149'].value }}"
+    icon: mdi:flash
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Type"
+    unique_id: "battery_type"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['33160'].value }}"
+    icon: mdi:car-battery
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Total Battery Charge Energy"
+    unique_id: "total_battery_charge_energy"
+    state_topic: "home/btle-solis/data"
+    device_class: "energy"
+    unit_of_measurement: "kWh"
+    state_class: "total_increasing"
+    value_template: "{{ value_json['33161'].value }}"
+    icon: mdi:battery-charging-100
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Today Battery Charge Energy"
+    unique_id: "today_battery_charge_energy"
+    state_topic: "home/btle-solis/data"
+    device_class: "energy"
+    unit_of_measurement: "kWh"
+    state_class: "total_increasing"
+    value_template: "{{ value_json['33163'].value }}"
+    icon: mdi:calendar-today
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Yesterday Battery Charge Energy"
+    unique_id: "yesterday_battery_charge_energy"
+    state_topic: "home/btle-solis/data"
+    device_class: "energy"
+    unit_of_measurement: "kWh"
+    state_class: "total"
+    value_template: "{{ value_json['33164'].value }}"
+    icon: mdi:calendar-blank
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Total Battery Discharge Energy"
+    unique_id: "total_battery_discharge_energy"
+    state_topic: "home/btle-solis/data"
+    device_class: "energy"
+    unit_of_measurement: "kWh"
+    state_class: "total_increasing"
+    value_template: "{{ value_json['33165'].value }}"
+    icon: mdi:battery-outline
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Today Battery Discharge Energy"
+    unique_id: "today_battery_discharge_energy"
+    state_topic: "home/btle-solis/data"
+    device_class: "energy"
+    unit_of_measurement: "kWh"
+    state_class: "total_increasing"
+    value_template: "{{ value_json['33167'].value }}"
+    icon: mdi:calendar-today
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Yesterday Battery Discharge Energy"
+    unique_id: "yesterday_battery_discharge_energy"
+    state_topic: "home/btle-solis/data"
+    device_class: "energy"
+    unit_of_measurement: "kWh"
+    state_class: "total"
+    value_template: "{{ value_json['33168'].value }}"
+    icon: mdi:calendar-blank
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Total Grid Charging Energy"
+    unique_id: "Total_Grid_Charging_Energy"
+    state_topic: "home/btle-solis/data"
+    device_class: "energy"
+    unit_of_measurement: "kWh"
+    state_class: "total_increasing"
+    value_template: "{{ value_json['33184'].value }}"
+    icon: mdi:flash
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Undervoltage Protection Value"
+    unique_id: "underVoltage_protection_value"
+    state_topic: "home/btle-solis/data"
+    device_class: "voltage"
+    unit_of_measurement: "V"
+    state_class: "measurement"
+    value_template: "{{ value_json['33208'].value }}"
+    icon: mdi:flash-alert
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Overvoltage Protection Value"
+    unique_id: "overVoltage_protection_value"
+    state_topic: "home/btle-solis/data"
+    device_class: "voltage"
+    unit_of_measurement: "V"
+    state_class: "measurement"
+    value_template: "{{ value_json['33211'].value }}"
+    icon: mdi:flash-outline
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Value"
+    unique_id: "BatteryBMS_Value"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34345'].value }}"
+    icon: mdi:car-battery
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Voltage Value"
+    unique_id: "BatteryBMS_VoltageValue"
+    state_topic: "home/btle-solis/data"
+    device_class: "voltage"
+    unit_of_measurement: "V"
+    state_class: "measurement"
+    value_template: "{{ value_json['34346'].value }}"
+    icon: mdi:car-battery
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS State"
+    unique_id: "BatteryBMS_State"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34347'].value }}"
+    icon: mdi:car-battery
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Min Voltage"
+    unique_id: "BatteryBMS_MinVoltage"
+    state_topic: "home/btle-solis/data"
+    device_class: "voltage"
+    unit_of_measurement: "V"
+    state_class: "measurement"
+    value_template: "{{ value_json['34348'].value }}"
+    icon: mdi:arrow-down-bold
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Max Voltage"
+    unique_id: "BatteryBMS_MaxVoltage"
+    state_topic: "home/btle-solis/data"
+    device_class: "voltage"
+    unit_of_measurement: "V"
+    state_class: "measurement"
+    value_template: "{{ value_json['34349'].value }}"
+    icon: mdi:arrow-up-bold
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Min Temperature"
+    unique_id: "BatteryBMS_MinTemperature"
+    state_topic: "home/btle-solis/data"
+    device_class: "temperature"
+    unit_of_measurement: "°C"
+    state_class: "measurement"
+    value_template: "{{ value_json['34350'].value }}"
+    icon: mdi:thermometer-minus
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Max Temperature"
+    unique_id: "BatteryBMS_MaxTemperature"
+    state_topic: "home/btle-solis/data"
+    device_class: "temperature"
+    unit_of_measurement: "°C"
+    state_class: "measurement"
+    value_template: "{{ value_json['34351'].value }}"
+    icon: mdi:thermometer-plus
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Min Location"
+    unique_id: "BatteryBMS_MinLocation"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34352'].value }}"
+    icon: mdi:map-marker-minus
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Min Voltage Core"
+    unique_id: "BatteryBMS_MinVoltageCore"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34353'].value }}"
+    icon: mdi:chip
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Max Location"
+    unique_id: "BatteryBMS_MaxLocation"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34354'].value }}"
+    icon: mdi:map-marker-plus
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Max Voltage Core"
+    unique_id: "BatteryBMS_MaxVoltageCore"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34355'].value }}"
+    icon: mdi:chip
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Min Location Temperature"
+    unique_id: "BatteryBMS_MinLocationTemperature"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34356'].value }}"
+    icon: mdi:thermometer-minus
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Min Temperature Core"
+    unique_id: "BatteryBMS_MinTemperatureCore"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34357'].value }}"
+    icon: mdi:thermometer-minus
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Max Location Temperature"
+    unique_id: "BatteryBMS_MaxLocationTemperature"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34358'].value }}"
+    icon: mdi:thermometer-plus
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Max Temperature Core"
+    unique_id: "BatteryBMS_MaxTemperatureCore"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34359'].value }}"
+    icon: mdi:thermometer-plus
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Capacity"
+    unique_id: "BatteryBMS_Capacity"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: "AH"
+    state_class: "measurement"
+    value_template: "{{ value_json['34360'].value }}"
+    icon: mdi:battery
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Number of Cycles"
+    unique_id: "BatteryBMS_NumberCycles"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34362'].value }}"
+    icon: mdi:recycle
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Number of Parallel Packs"
+    unique_id: "BatteryBMS_NumberParallel"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34363'].value }}"
+    icon: mdi:chart-timeline-variant
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Number of Packs"
+    unique_id: "BatteryBMS_NumberPacks"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34364'].value }}"
+    icon: mdi:package-variant-closed
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery BMS Number of Modules"
+    unique_id: "BatteryBMS_NumberModules"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['34365'].value }}"
+    icon: mdi:cube
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Current Operating Battery Model"
+    unique_id: "current_operating_battery_model"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['43009'].value }}"
+    icon: mdi:battery
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Over Discharge SOC"
+    unique_id: "over_discharge_soc"
+    state_topic: "home/btle-solis/data"
+    device_class: "battery"
+    unit_of_measurement: "%"
+    state_class: "measurement"
+    value_template: "{{ value_json['43011'].value }}"
+    icon: mdi:battery-alert
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Maximum Charging Current"
+    unique_id: "maximum_charging_current"
+    state_topic: "home/btle-solis/data"
+    device_class: "current"
+    unit_of_measurement: "A"
+    state_class: "measurement"
+    value_template: "{{ value_json['43012'].value }}"
+    icon: mdi:flash
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Maximum Discharge Current"
+    unique_id: "maximum_discharge_current"
+    state_topic: "home/btle-solis/data"
+    device_class: "current"
+    unit_of_measurement: "A"
+    state_class: "measurement"
+    value_template: "{{ value_json['43013'].value }}"
+    icon: mdi:flash-outline
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Strong Charge SOC"
+    unique_id: "strong_charge_soc"
+    state_topic: "home/btle-solis/data"
+    device_class: "battery"
+    unit_of_measurement: "%"
+    state_class: "measurement"
+    value_template: "{{ value_json['43018'].value }}"
+    icon: mdi:battery-charging-high
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Force Limit Current"
+    unique_id: "force_limit_current"
+    state_topic: "home/btle-solis/data"
+    device_class: "power"
+    unit_of_measurement: "W"
+    state_class: "measurement"
+    value_template: "{{ value_json['43027'].value }}"
+    icon: mdi:power-plug
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Energy Storage Control Switch"
+    unique_id: "energy_storage_control_switch"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['43110'].value }}"
+    icon: mdi:toggle-switch
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Maximum Battery Charging Current Setting"
+    unique_id: "maximum_battery_charging_current_setting"
+    state_topic: "home/btle-solis/data"
+    device_class: "current"
+    unit_of_measurement: "A"
+    state_class: "measurement"
+    value_template: "{{ value_json['43117'].value }}"
+    icon: mdi:flash
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Maximum Battery Discharge Current Setting"
+    unique_id: "maximum_battery_discharge_current_setting"
+    state_topic: "home/btle-solis/data"
+    device_class: "current"
+    unit_of_measurement: "A"
+    state_class: "measurement"
+    value_template: "{{ value_json['43118'].value }}"
+    icon: mdi:flash-outline
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Awaken Voltage"
+    unique_id: "awaken_voltage"
+    state_topic: "home/btle-solis/data"
+    device_class: "voltage"
+    unit_of_measurement: "V"
+    state_class: "measurement"
+    value_template: "{{ value_json['43348'].value }}"
+    icon: mdi:lightning-bolt
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Awaken Time"
+    unique_id: "awaken_time"
+    state_topic: "home/btle-solis/data"
+    device_class: "duration"
+    unit_of_measurement: "s"
+    state_class: "measurement"
+    value_template: "{{ value_json['43349'].value }}"
+    icon: mdi:clock
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Output Port Control"
+    unique_id: "output_port_control"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['43374'].value }}"
+    icon: mdi:toggle-switch
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Awaken Time Setting"
+    unique_id: "Awaken_Time_Setting"
+    state_topic: "home/btle-solis/data"
+    device_class: "duration"
+    unit_of_measurement: "s"
+    state_class: "measurement"
+    value_template: "{{ value_json['43376'].value }}"
+    icon: mdi:timer-sand
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "G100 Manual Fault Clearing"
+    unique_id: "G100_Manual_Fault_Clearing"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['43378'].value }}"
+    icon: mdi:alert
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Overdischarge Hysteresis SOC"
+    unique_id: "Overdischarge_Hysteresis_SOC"
+    state_topic: "home/btle-solis/data"
+    device_class: "battery"
+    unit_of_measurement: "%"
+    state_class: "measurement"
+    value_template: "{{ value_json['43481'].value }}"
+    icon: mdi:battery-alert
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Healing SOC"
+    unique_id: "battery_Healing_SOC"
+    state_topic: "home/btle-solis/data"
+    device_class: "battery"
+    unit_of_measurement: "%"
+    state_class: "measurement"
+    value_template: "{{ value_json['43482'].value }}"
+    icon: mdi:battery-heart
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Battery Dual Model"
+    unique_id: "batteryDual_model"
+    state_topic: "home/btle-solis/data"
+    unit_of_measurement: ""
+    state_class: "measurement"
+    value_template: "{{ value_json['43802'].value }}"
+    icon: mdi:battery-multiple
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"

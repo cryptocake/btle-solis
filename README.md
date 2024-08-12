@@ -1,22 +1,55 @@
-# Zonneplan Nexus Home Battery Interface
+# Solis Bluetooth LE Interface
 
-This project provides a Python script to interface with the Nexus Home battery with Solis S6 eh3p10k-h-eu(zp) inverter. It was built specifically for Zonneplan customers and is currently a proof-of-concept (PoC) running on a Raspberry Pi with onboard Bluetooth positioned near the inverter.
+This project provides a Python script to interface with the Zonneplan Nexus Home battery with Solis S6 eh3p10k-h-eu(zp) inverter. It was built specifically for Zonneplan customers and is currently a proof-of-concept (PoC) running on a Raspberry Pi with onboard Bluetooth positioned near the inverter.
 
 ## Features
 
 - Communicates with the Nexus Home battery using Bluetooth Low Energy (BLE)
 - Constructs and sends commands to the inverter and receives responses
-- Parses the responses and prints the results
+- Parses the responses and publishes them to an MQTT Broker
 
 ## Requirements
 
 - A Raspberry Pi with onboard Bluetooth
-- The `bluepy` Python library
+- The `bluepy` and `paho-mqtt` Python libraries (see requirements.txt)
+- Python 3.7 or newer
 
 ## Installation
 
-1. Clone this repository to your Raspberry Pi.
-2. Install the `bluepy` library using pip: `pip install bluepy`
+1. Clone this repository to your Raspberry Pi
+   
+   `git clone https://github.com/cryptocake/btle-solis.git`
+2. Install the required libraries: 
+    
+    `pip install -r requirements.txt`
+3. If you get an error installing the libraries, you'll need to set up a Python virtual environment first
+4. Find the MAC Address of your Solis inverter. The inverter's discoverable bluetooth name starts with `INV_`
+5. Edit the required values at the top of `btle-solis.py`
+```python
+# EDIT HERE ############################################################################
+MAC_ADDRESS = ""  # xx:xx:xx:xx:xx:xx MAC address of the Inverter
+
+# UUIDs of the services and characteristics
+SERVICE_UUID_FFE0 = "0000ffe0-0000-1000-8000-00805f9b34fb"
+CHAR_UUID_FFE1 = "0000ffe1-0000-1000-8000-00805f9b34fb"
+CHAR_UUID_FFE2 = "0000ffe2-0000-1000-8000-00805f9b34fb"
+
+# MQTT Broker
+MQTT_BROKER_IP = ""
+MQTT_BROKER_PORT = 1883
+MQTT_USERNAME = ""
+MQTT_PASSWORD = ""
+
+INTERVAL = 20  # Run this script every xx seconds.
+
+# Set TEST_MODE to True if you want to test the data output inside your terminal first.
+# In TEST_MODE you will not publish data to MQTT.
+TEST_MODE = False
+# STOP EDITING #########################################################################
+```
+6. Add the `mqtt.yaml` sensors to your Home Assistant configuration
+7. Set the correct path and user in the `btle-solis.service` file
+8. Install and enable the service, or use any other process control system
 
 ## Usage
 
@@ -28,7 +61,7 @@ Feel free to join the development of this project. Any contributions you make ar
 
 ## Future Plans
 
-The goal is to turn this script into a Home Assistant HACS plugin someday. Stay tuned for updates!
+~~The goal is to turn this script into a Home Assistant HACS plugin someday. Stay tuned for updates!~~
 
 ## Community
 

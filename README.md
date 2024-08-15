@@ -45,9 +45,15 @@ INTERVAL = 20  # Run this script every xx seconds.
 # Set TEST_MODE to True if you want to test the data output inside your terminal first.
 # In TEST_MODE you will not publish data to MQTT.
 TEST_MODE = False
+
+# Set LITE_MODE to True if you want to request minimal data from the inverter, see mqtt-lite.yaml.
+LITE_MODE = False
 # STOP EDITING #########################################################################
 ```
-6. Add the `mqtt.yaml` sensors to your Home Assistant configuration
+6. Add the `mqtt.yaml` or `mqtt-lite.yaml` sensors to your Home Assistant configuration
+   
+   **LITE_MODE**: was added for people who already retrieve the Pylontech Force H3 information directly using the 
+   Solarman Protocol. By using **LITE_MODE** you will only retrieve the most interesting values from the inverter.
 7. Set the correct path and user in the `btle-solis.service` file
 8. Install and enable the service, or use any other process control system
 

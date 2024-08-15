@@ -899,3 +899,31 @@ sensor:
       manufacturer: "Solis"
       name: "Zonneplan Nexus"
       model: "V1"
+
+  - name: "Timing Charging Current Setting"
+    unique_id: "timing_charging_current_setting"
+    state_topic: "home/btle-solis/data"
+    device_class: "current"
+    unit_of_measurement: "A"
+    state_class: "measurement"
+    value_template: "{{ value_json['43141'].value }}"
+    icon: mdi:flash
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"
+
+  - name: "Timing Discharge Current Setting"
+    unique_id: "timing_discharge_current_setting"
+    state_topic: "home/btle-solis/data"
+    device_class: "current"
+    unit_of_measurement: "A"
+    state_class: "measurement"
+    value_template: "{{ value_json['43142'].value }}"
+    icon: mdi:flash
+    device:
+      identifiers: "SOLIS-NEXUS"
+      manufacturer: "Solis"
+      name: "Zonneplan Nexus"
+      model: "V1"

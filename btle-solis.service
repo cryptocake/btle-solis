@@ -3,7 +3,7 @@ Description=Solis Bluetooth LE Interface
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /home/pi/btle-solis.py
+ExecStart=/home/pi/btle-solis/myenv/bin/python3 /home/pi/btle-solis/btle-solis.py
 Environment=PYTHONUNBUFFERED=1
 Restart=always
 User=pi

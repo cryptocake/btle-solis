@@ -19,43 +19,83 @@ This project provides a Python script to interface with the Zonneplan Nexus Home
 1. Clone this repository to your Raspberry Pi
    
    `git clone https://github.com/cryptocake/btle-solis.git`
-2. Install the required libraries: 
-    
-    `pip install -r requirements.txt`
-3. If you get an error installing the libraries, you'll need to set up a Python virtual environment first
-4. Find the MAC Address of your Solis inverter. The inverter's discoverable bluetooth name starts with `INV_`
-5. Edit the required values at the top of `btle-solis.py`
-```python
-# EDIT HERE ############################################################################
-MAC_ADDRESS = ""  # xx:xx:xx:xx:xx:xx MAC address of the Inverter
+   
 
-# UUIDs of the services and characteristics
-SERVICE_UUID_FFE0 = "0000ffe0-0000-1000-8000-00805f9b34fb"
-CHAR_UUID_FFE1 = "0000ffe1-0000-1000-8000-00805f9b34fb"
-CHAR_UUID_FFE2 = "0000ffe2-0000-1000-8000-00805f9b34fb"
+2. Run the following commands:
+   ```bash
+   cd ./btle-solis
+   sudo apt install python3-venv
+   python3 -m venv myenv
+   source myenv/bin/activate
+   pip install -r requirements.txt
+   ```
+3. Find the MAC Address of your Solis inverter. The inverter's discoverable bluetooth name starts with `INV_`
+   ```bash
+   bluetoothctl
+      power on
+      agent on
+      scan on
+   ```
+   
+4. Trust the device and try to establish a connection
+   ```bash
+   bluetoothctl
+      trust xx:xx:xx:xx:xx:xx
+      connect xx:xx:xx:xx:xx:xx
+   ```
+   
+5. If the connection failed, then try to press & hold the touch-button on the inverter for 5 seconds, until the button 
+   starts flashing. Try to connect once again.
+   
 
-# MQTT Broker
-MQTT_BROKER_IP = ""
-MQTT_BROKER_PORT = 1883
-MQTT_USERNAME = ""
-MQTT_PASSWORD = ""
-
-INTERVAL = 20  # Run this script every xx seconds.
-
-# Set TEST_MODE to True if you want to test the data output inside your terminal first.
-# In TEST_MODE you will not publish data to MQTT.
-TEST_MODE = False
-
-# Set LITE_MODE to True if you want to request minimal data from the inverter, see mqtt-lite.yaml.
-LITE_MODE = False
-# STOP EDITING #########################################################################
-```
-6. Add the `mqtt.yaml` or `mqtt-lite.yaml` sensors to your Home Assistant configuration
+6. If connected successfully, disconnect and continue.
+   ```bash
+   bluetoothctl
+      disconnect xx:xx:xx:xx:xx:xx
+   ```
+7. Edit the required values at the top of `btle-solis.py`
+   ```python
+   # EDIT HERE ############################################################################
+   MAC_ADDRESS = ""  # xx:xx:xx:xx:xx:xx MAC address of the Inverter
+   
+   # UUIDs of the services and characteristics
+   SERVICE_UUID_FFE0 = "0000ffe0-0000-1000-8000-00805f9b34fb"
+   CHAR_UUID_FFE1 = "0000ffe1-0000-1000-8000-00805f9b34fb"
+   CHAR_UUID_FFE2 = "0000ffe2-0000-1000-8000-00805f9b34fb"
+   
+   # MQTT Broker
+   MQTT_BROKER_IP = ""
+   MQTT_BROKER_PORT = 1883
+   MQTT_USERNAME = ""
+   MQTT_PASSWORD = ""
+   
+   INTERVAL = 20  # Run this script every xx seconds.
+   
+   # Set TEST_MODE to True if you want to test the data output inside your terminal first.
+   # In TEST_MODE you will not publish data to MQTT.
+   TEST_MODE = False
+   
+   # Set LITE_MODE to True if you want to request minimal data from the inverter, see mqtt-lite.yaml.
+   LITE_MODE = False
+   # STOP EDITING #########################################################################
+   ```
+8. Add the `mqtt.yaml` or `mqtt-lite.yaml` sensors to your Home Assistant configuration
    
    **LITE_MODE**: was added for people who already retrieve the Pylontech Force H3 information directly using the 
    Solarman Protocol. By using **LITE_MODE** you will only retrieve the most interesting values from the inverter.
-7. Set the correct path and user in the `btle-solis.service` file
-8. Install and enable the service, or use any other process control system
+   
+
+9. Copy and paste the contents of `btle-solis.service` (do not forget to edit User and the correct path!)
+   ```bash
+   sudo nano /etc/systemd/system/btle-solis.service
+   ```
+
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable btle-solis.service
+   sudo systemctl start btle-solis.service
+   ```
+
 
 ## Usage
 

@@ -11,17 +11,12 @@ REGISTER_MAP_LITE = {
     33164: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.01,"unit":"kWh","name":"yesterday_battery_charge_energy"},
     33165: {"value":None,"num":2,"negative":0,"datamode":0,"datatype":1,"gain":0.01,"unit":"kWh","name":"total_battery_discharge_energy"},
     33167: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.01,"unit":"kWh","name":"today_battery_discharge_energy"},
-    33168: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.01,"unit":"kWh","name":"yesterday_battery_discharge_energy"},
-
-    # Self-use Mode
-    43141: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"timing_charging_current_setting"},
-    43142: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.1,"unit":"A","name":"timing_discharge_current_setting"}
+    33168: {"value":None,"num":1,"negative":0,"datamode":0,"datatype":1,"gain":0.01,"unit":"kWh","name":"yesterday_battery_discharge_energy"}
 }
 
 REGISTERS_LITE = {
     "33079": {"length": 15, "func_code": "04"},
-    "33161": {"length": 8, "func_code": "04"},
-    "43141": {"length": 2, "func_code": "03"}
+    "33161": {"length": 8, "func_code": "04"}
 }
 
 REGISTER_MAP = {
